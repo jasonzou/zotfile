@@ -1,0 +1,122 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://global/skin/global.css" type="text/css"?>
+<!DOCTYPE overlay SYSTEM "chrome://zotero-plus/locale/preferences.dtd">
+
+<overlay id="zotfileplus-prefs-overlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+    <script src="preferences.xul.js"/>
+    
+    <prefwindow id="zotero-prefs">
+        <prefpane id="zotfileplus-prefpane" label="ZotFile+" 
+                  onpaneload="ZotFilePlus_Prefs_Init();"
+                  helpTopic="zotfileplus">
+            <preferences>
+                <preference id="pref-zotfileplus-renamePattern" name="extensions.zotfileplus.renamePattern" type="string"/>
+                <preference id="pref-zotfileplus-renameFormat_patent" name="extensions.zotfileplus.renameFormat_patent" type="string"/>
+                <preference id="pref-zotfileplus-maxTitleLength" name="extensions.zotfileplus.maxTitleLength" type="int"/>
+                <preference id="pref-zotfileplus-truncateTitle" name="extensions.zotfileplus.truncateTitle" type="bool"/>
+                <preference id="pref-zotfileplus-smartTruncate" name="extensions.zotfileplus.smartTruncate" type="bool"/>
+                <preference id="pref-zotfileplus-maxTitleLengthSmart" name="extensions.zotfileplus.maxTitleLengthSmart" type="bool"/>
+                <preference id="pref-zotfileplus-maxAuthors" name="extensions.zotfileplus.maxAuthors" type="int"/>
+                <preference id="pref-zotfileplus-truncateAuthors" name="extensions.zotfileplus.truncateAuthors" type="bool"/>
+                <preference id="pref-zotfileplus-maxAuthorsTruncate" name="extensions.zotfileplus.maxAuthorsTruncate" type="int"/>
+                <preference id="pref-zotfileplus-addEtAl" name="extensions.zotfileplus.addEtAl" type="bool"/>
+                <preference id="pref-zotfileplus-etAlString" name="extensions.zotfileplus.etAlString" type="string"/>
+                <preference id="pref-zotfileplus-authorsDelimiter" name="extensions.zotfileplus.authorsDelimiter" type="string"/>
+                <preference id="pref-zotfileplus-removeDiacritics" name="extensions.zotfileplus.removeDiacritics" type="bool"/>
+                <preference id="pref-zotfileplus-removePeriods" name="extensions.zotfileplus.removePeriods" type="bool"/>
+                <preference id="pref-zotfileplus-replaceBlanks" name="extensions.zotfileplus.replaceBlanks" type="bool"/>
+                <preference id="pref-zotfileplus-toLowerCase" name="extensions.zotfileplus.toLowerCase" type="bool"/>
+                <preference id="pref-zotfileplus-useZoteroToRename" name="extensions.zotfileplus.useZoteroToRename" type="bool"/>
+                <preference id="pref-zotfileplus-useFileTypes" name="extensions.zotfileplus.useFileTypes" type="bool"/>
+                <preference id="pref-zotfileplus-filetypes" name="extensions.zotfileplus.filetypes" type="string"/>
+                <preference id="pref-zotfileplus-allFiles" name="extensions.zotfileplus.allFiles" type="bool"/>
+                <preference id="pref-zotfileplus-confirmation" name="extensions.zotfileplus.confirmation" type="bool"/>
+                <preference id="pref-zotfileplus-confirmation_batch_ask" name="extensions.zotfileplus.confirmation_batch_ask" type="bool"/>
+                <preference id="pref-zotfileplus-confirmation_batch" name="extensions.zotfileplus.confirmation_batch" type="int"/>
+                <preference id="pref-zotfileplus-userInput" name="extensions.zotfileplus.userInput" type="bool"/>
+                <preference id="pref-zotfileplus-userInput_Default" name="extensions.zotfileplus.userInput_Default" type="string"/>
+                <preference id="pref-zotfileplus-automatic_renaming" name="extensions.zotfileplus.automatic_renaming" type="int"/>
+                <preference id="pref-zotfileplus-disable_renaming" name="extensions.zotfileplus.disable_renaming" type="bool"/>
+                <preference id="pref-zotfileplus-customWildcards" name="extensions.zotfileplus.customWildcards" type="string"/>
+                <preference id="pref-zotfileplus-zotfile3update" name="extensions.zotfileplus.zotfile3update" type="bool"/>
+                <preference id="pref-zotfileplus-zotero7transition" name="extensions.zotfileplus.zotero7transition" type="bool"/>
+                <preference id="pref-zotfileplus-info_window_duration" name="extensions.zotfileplus.info_window_duration" type="int"/>
+                <preference id="pref-zotfileplus-info_window_duration_clickable" name="extensions.zotfileplus.info_window_duration_clickable" type="int"/>
+                <preference id="pref-zotfileplus-truncate_authors_max" name="extensions.zotfileplus.truncate_authors_max" type="int"/>
+            </preferences>
+            
+            <vbox id="zotfileplus-prefpane-box">
+                <groupbox>
+                    <caption label="Rename Pattern"/>
+                    <hbox align="center">
+                        <label value="Default Pattern:" control="renamePattern"/>
+                        <textbox id="renamePattern" preference="pref-zotfileplus-renamePattern" flex="1"/>
+                    </hbox>
+                    <description>
+                        Examples:
+                        {%a_}{%y_}{%t} → Smith_2023_Machine_Learning.pdf
+                        {%a_}{%y}_{%j} → Smith_2023_Nature.pdf
+                        {%y}/{%a}_{%t} → 2023/Smith_Machine_Learning.pdf
+                    </description>
+                    <description>
+                        Wildcards: %a=author, %y=year, %t=title, %j=journal, %c=collection
+                    </description>
+                </groupbox>
+                
+                <groupbox>
+                    <caption label="Title Formatting"/>
+                    <hbox align="center">
+                        <label value="Maximum Title Length:" control="maxTitleLength"/>
+                        <textbox id="maxTitleLength" preference="pref-zotfileplus-maxTitleLength" type="number" min="10" max="500" size="5"/>
+                    </hbox>
+                    <hbox align="center">
+                        <checkbox id="truncateTitle" preference="pref-zotfileplus-truncateTitle" label="Truncate after punctuation (:.?!)"/>
+                    </hbox>
+                    <hbox align="center">
+                        <checkbox id="smartTruncate" preference="pref-zotfileplus-smartTruncate" label="Smart truncation at word boundaries"/>
+                    </hbox>
+                </groupbox>
+                
+                <groupbox>
+                    <caption label="Author Formatting"/>
+                    <hbox align="center">
+                        <label value="Maximum Authors:" control="maxAuthors"/>
+                        <textbox id="maxAuthors" preference="pref-zotfileplus-maxAuthors" type="number" min="1" max="20" size="5"/>
+                    </hbox>
+                    <hbox align="center">
+                        <checkbox id="truncateAuthors" preference="pref-zotfileplus-truncateAuthors" label="Truncate multiple authors"/>
+                    </hbox>
+                    <hbox align="center" style="margin-left: 20px;">
+                        <checkbox id="addEtAl" preference="pref-zotfileplus-addEtAl" label="Add 'et al' after first author"/>
+                    </hbox>
+                    <hbox align="center" style="margin-left: 20px;">
+                        <label value="Et al string:" control="etAlString"/>
+                        <textbox id="etAlString" preference="pref-zotfileplus-etAlString"/>
+                    </hbox>
+                    <hbox align="center">
+                        <label value="Author Delimiter:" control="authorsDelimiter"/>
+                        <textbox id="authorsDelimiter" preference="pref-zotfileplus-authorsDelimiter" maxlength="5"/>
+                    </hbox>
+                </groupbox>
+                
+                <groupbox>
+                    <caption label="Text Processing"/>
+                    <checkbox id="removeDiacritics" preference="pref-zotfileplus-removeDiacritics" label="Remove diacritics (ä→a, é→e, etc.)"/>
+                    <checkbox id="removePeriods" preference="pref-zotfileplus-removePeriods" label="Remove periods"/>
+                    <checkbox id="replaceBlanks" preference="pref-zotfileplus-replaceBlanks" label="Replace blanks with underscores"/>
+                    <checkbox id="toLowerCase" preference="pref-zotfileplus-toLowerCase" label="Convert to lowercase"/>
+                </groupbox>
+                
+                <groupbox>
+                    <caption label="Custom Wildcards"/>
+                    <vbox>
+                        <label value="Custom Wildcards (JSON):"/>
+                        <textbox id="customWildcards" preference="pref-zotfileplus-customWildcards" multiline="true" rows="4" cols="60" 
+                                placeholder='{&quot;k&quot;: &quot;DOI&quot;, &quot;u&quot;: &quot;url&quot;}'
+                                tooltiptext="Define custom wildcards as JSON. Example: {&quot;k&quot;: &quot;DOI&quot;} creates %k wildcard for DOI field."/>
+                    </vbox>
+                </groupbox>
+            </vbox>
+        </prefpane>
+    </prefwindow>
+</overlay>

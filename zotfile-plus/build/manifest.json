@@ -1,0 +1,25 @@
+{
+  "manifest_version": 2,
+  "name": "ZotFile+",
+  "version": "1.0.6",
+  "description": "Advanced file renaming and organization for Zotero 7. Provides powerful wildcard-based batch renaming that complements ZotMoov.",
+  "homepage_url": "https://github.com/zotfile-community/zotfile-plus",
+  "author": "ZotFile Community",
+  "icons": {
+    "48": "content/icons/icon48.png",
+    "96": "content/icons/icon96.png"
+  },
+  "applications": {
+    "zotero": {
+      "id": "zotfileplus@zotero.org",
+      "update_url": "https://raw.githubusercontent.com/zotfile-community/zotfile-plus/main/updates.json",
+      "strict_min_version": "7.0.0",
+      "strict_max_version": "7.*"
+    }
+  },
+  "background": {
+    "scripts": [
+      "bootstrap.js"
+    ]
+  }
+}
