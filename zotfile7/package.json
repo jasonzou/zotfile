@@ -1,7 +1,7 @@
 {
   "name": "zotfile7",
   "type": "module",
-  "version": "3.1.2",
+  "version": "0.0.3",
   "description": "zotfile for zotero 7",
   "config": {
     "addonName": "zotfile for zotero 7",
