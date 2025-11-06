@@ -3,8 +3,8 @@
  * Batch rename operations for Zotero attachments
  */
 
-import { ZotFilePlus_WildcardEngine } from "./wildcards";
-import { ZotFilePlus_Formatter } from "./formatter";
+import { ZotFile7_WildcardEngine } from "./wildcards";
+import { ZotFile7_Formatter } from "./formatter";
 
 interface RenameResult {
   item: Zotero.Item;

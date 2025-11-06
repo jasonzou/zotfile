@@ -37,15 +37,15 @@ export class ZotFile7_Formatter {
   
   public formatTitle(title: string): string {
     if (!title) return '';
-    
+
     // Apply preferences using Zotero's preference system
-    const maxTitleLength = Zotero.Prefs.get(`${addon['data'].config.prefsPrefix}.maxTitleLength`) || 80;
-    const truncateTitle = Zotero.Prefs.get(`${addon['data'].config.prefsPrefix}.truncateTitle`) || true;
-    const smartTruncate = Zotero.Prefs.get(`${addon['data'].config.prefsPrefix}.smartTruncate`) || true;
-    const removeDiacriticsPref = Zotero.Prefs.get(`${addon['data'].config.prefsPrefix}.removeDiacritics`) || false;
-    const removePeriods = Zotero.Prefs.get(`${addon['data'].config.prefsPrefix}.removePeriods`) || false;
-    const replaceBlanks = Zotero.Prefs.get(`${addon['data'].config.prefsPrefix}.replaceBlanks`) || false;
-    const toLowerCase = Zotero.Prefs.get(`${addon['data'].config.prefsPrefix}.toLowerCase`) || false;
+    const maxTitleLength = (Zotero.Prefs.get(`${addon['data'].config.prefsPrefix}.maxTitleLength`) as number) || 80;
+    const truncateTitle = (Zotero.Prefs.get(`${addon['data'].config.prefsPrefix}.truncateTitle`) as boolean) ?? true;
+    const smartTruncate = (Zotero.Prefs.get(`${addon['data'].config.prefsPrefix}.smartTruncate`) as boolean) ?? true;
+    const removeDiacriticsPref = (Zotero.Prefs.get(`${addon['data'].config.prefsPrefix}.removeDiacritics`) as boolean) || false;
+    const removePeriods = (Zotero.Prefs.get(`${addon['data'].config.prefsPrefix}.removePeriods`) as boolean) || false;
+    const replaceBlanks = (Zotero.Prefs.get(`${addon['data'].config.prefsPrefix}.replaceBlanks`) as boolean) || false;
+    const toLowerCase = (Zotero.Prefs.get(`${addon['data'].config.prefsPrefix}.toLowerCase`) as boolean) || false;
     
     let formattedTitle = title;
 
@@ -102,14 +102,14 @@ export class ZotFile7_Formatter {
 
   public formatAuthorNames(creators: Array<any>): string {
     if (!creators || creators.length === 0) return '';
-    
+
     // Apply preferences using Zotero's preference system
-    const maxAuthors = Zotero.Prefs.get(`${addon['data'].config.prefsPrefix}.maxAuthors`) || 3;
-    const truncateAuthors = Zotero.Prefs.get(`${addon['data'].config.prefsPrefix}.truncateAuthors`) || true;
-    const maxAuthorsTruncate = Zotero.Prefs.get(`${addon['data'].config.prefsPrefix}.maxAuthorsTruncate`) || 2;
-    const addEtAl = Zotero.Prefs.get(`${addon['data'].config.prefsPrefix}.addEtAl`) || true;
-    const etAlString = Zotero.Prefs.get(`${addon['data'].config.prefsPrefix}.etAlString`) || ' et al';
-    const authorsDelimiter = Zotero.Prefs.get(`${addon['data'].config.prefsPrefix}.authorsDelimiter`) || '_';
+    const maxAuthors = (Zotero.Prefs.get(`${addon['data'].config.prefsPrefix}.maxAuthors`) as number) || 3;
+    const truncateAuthors = (Zotero.Prefs.get(`${addon['data'].config.prefsPrefix}.truncateAuthors`) as boolean) ?? true;
+    const maxAuthorsTruncate = (Zotero.Prefs.get(`${addon['data'].config.prefsPrefix}.maxAuthorsTruncate`) as number) || 2;
+    const addEtAl = (Zotero.Prefs.get(`${addon['data'].config.prefsPrefix}.addEtAl`) as boolean) ?? true;
+    const etAlString = (Zotero.Prefs.get(`${addon['data'].config.prefsPrefix}.etAlString`) as string) || ' et al';
+    const authorsDelimiter = (Zotero.Prefs.get(`${addon['data'].config.prefsPrefix}.authorsDelimiter`) as string) || '_';
 
     let authorNames = creators.map(creator => creator.lastName || creator.name || '').filter(name => name !== '');
 

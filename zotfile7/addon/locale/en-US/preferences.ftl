@@ -1,4 +1,4 @@
-pref-title = Addon Template Example
+pref-title = Zotfile7 Settings
 pref-enable =
     .label = Enable
 pref-input = Input

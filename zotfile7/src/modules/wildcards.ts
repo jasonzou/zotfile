@@ -78,23 +78,28 @@ export class ZotFile7_WildcardEngine {
     this.customWildcards = { ...this.customWildcards, ...wildcards };
   }
 
-  public async parsePattern(pattern: string, item: _ZoteroTypes.Item): Promise<string> {
+  public async parsePattern(pattern: string, item: Zotero.Item): Promise<string> {
     // Replace wildcards in the pattern
     let result = pattern;
 
     // Handle complex wildcard patterns like {%a_}{%y_}{%t}
     const complexWildcardRegex = /\{([^}]+)\}/g;
-    let match;
-    
-    while ((match = complexWildcardRegex.exec(result)) !== null) {
+
+    // Collect all matches first to avoid infinite loop when modifying the string
+    const matches = Array.from(result.matchAll(complexWildcardRegex));
+
+    // Process matches in reverse order to maintain correct indices
+    for (let i = matches.length - 1; i >= 0; i--) {
+      const match = matches[i];
       const fullMatch = match[0];
       const content = match[1];
-      
+      const matchIndex = match.index!;
+
       // Process operations like truncation, case conversion, etc.
-      let processedContent = await this.processWildcardContent(content, item);
-      
-      // Replace the wildcard with actual value
-      result = result.replace(fullMatch, processedContent);
+      const processedContent = await this.processWildcardContent(content, item);
+
+      // Replace the wildcard with actual value using splice approach
+      result = result.substring(0, matchIndex) + processedContent + result.substring(matchIndex + fullMatch.length);
     }
 
     return result;
@@ -112,11 +117,11 @@ export class ZotFile7_WildcardEngine {
       }
       return '';
     }
-    
+
     // Handle operations like %t50 (truncate to 50 chars), %t.upper (uppercase)
     const wildcardRegex = /%([a-zA-Z])(\d+|[a-zA-Z.]+)/;
     const operationMatch = content.match(wildcardRegex);
-    
+
     if (operationMatch) {
       const wildcard = operationMatch[1];
       const operation = operationMatch[2];
@@ -124,12 +129,23 @@ export class ZotFile7_WildcardEngine {
       const baseValue = await this.processSingleWildcard(wildcard, item);
       return this.applyOperation(baseValue, operation);
     }
-    
-    // Just a simple wildcard
+
+    // Extract wildcard and any trailing literal text (e.g., %a_ -> wildcard='a', suffix='_')
+    const wildcardWithSuffixRegex = /%([a-zA-Z])(.*)$/;
+    const match = content.match(wildcardWithSuffixRegex);
+
+    if (match) {
+      const wildcardKey = match[1];
+      const suffix = match[2] || '';
+      const baseValue = await this.processSingleWildcard(wildcardKey, item);
+      return baseValue + suffix;
+    }
+
+    // Just a simple wildcard (shouldn't reach here normally)
     return await this.processSingleWildcard(content, item);
   }
 
-  private async processSingleWildcard(wildcard: string, item: _ZoteroTypes.Item): Promise<string> {
+  private async processSingleWildcard(wildcard: string, item: Zotero.Item): Promise<string> {
     // Remove any numeric/operation suffixes to get the wildcard key
     const cleanWildcard = wildcard.replace(/[\d.].*$/, '');
     
@@ -164,7 +180,7 @@ export class ZotFile7_WildcardEngine {
     return value || '';
   }
 
-  private async getFieldValue(item: _ZoteroTypes.Item, fieldPath: string): Promise<string | null> {
+  private async getFieldValue(item: Zotero.Item, fieldPath: string): Promise<string | null> {
     try {
       // Handle special field paths like 'author'
       if (fieldPath === 'author' || fieldPath === 'editor') {
@@ -191,12 +207,12 @@ export class ZotFile7_WildcardEngine {
 
   private async getCreatorNames(item: Zotero.Item, creatorType: string): Promise<string> {
     // Use the preferences system via addon global
-    const maxAuthors = Zotero.Prefs.get(`${addon['data'].config.prefsPrefix}.maxAuthors`) || 3;
-    const truncateAuthors = Zotero.Prefs.get(`${addon['data'].config.prefsPrefix}.truncateAuthors`) || true;
-    const maxAuthorsTruncate = Zotero.Prefs.get(`${addon['data'].config.prefsPrefix}.maxAuthorsTruncate`) || 2;
-    const addEtAl = Zotero.Prefs.get(`${addon['data'].config.prefsPrefix}.addEtAl`) || true;
-    const etAlString = Zotero.Prefs.get(`${addon['data'].config.prefsPrefix}.etAlString`) || ' et al';
-    const authorsDelimiter = Zotero.Prefs.get(`${addon['data'].config.prefsPrefix}.authorsDelimiter`) || '_';
+    const maxAuthors = (Zotero.Prefs.get(`${addon['data'].config.prefsPrefix}.maxAuthors`) as number) || 3;
+    const truncateAuthors = (Zotero.Prefs.get(`${addon['data'].config.prefsPrefix}.truncateAuthors`) as boolean) ?? true;
+    const maxAuthorsTruncate = (Zotero.Prefs.get(`${addon['data'].config.prefsPrefix}.maxAuthorsTruncate`) as number) || 2;
+    const addEtAl = (Zotero.Prefs.get(`${addon['data'].config.prefsPrefix}.addEtAl`) as boolean) ?? true;
+    const etAlString = (Zotero.Prefs.get(`${addon['data'].config.prefsPrefix}.etAlString`) as string) || ' et al';
+    const authorsDelimiter = (Zotero.Prefs.get(`${addon['data'].config.prefsPrefix}.authorsDelimiter`) as string) || '_';
 
     const creators = item.getCreators();
     if (!creators || creators.length === 0) {

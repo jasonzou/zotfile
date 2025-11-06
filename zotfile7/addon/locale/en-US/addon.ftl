@@ -1,10 +1,11 @@
 startup-begin = Addon is loading
 startup-finish = Addon is ready
-menuitem-label = Addon Template: Helper Examples
-menupopup-label = Addon Template: Menupopup
-menuitem-submenulabel = Addon Template
-menuitem-filemenulabel = Addon Template: File Menuitem
-prefs-title = Template
+menuzotfile7-label = Zotfile7: Manage Attachments
+menupopup-label = ZotFile7: Manage Attachments
+menuitem-submenulabel = ZotFile7 Submenu Item
+menuitem-submenu2label = Rename Attachments
+menuitem-filemenulabel = ZotFile7: File Menu
+prefs-title = Zotfile7
 prefs-table-title = Title
 prefs-table-detail = Detail
 tabpanel-lib-tab-label = Lib Tab
